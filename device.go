@@ -193,7 +193,15 @@ func (dev *Device) readLoop() {
 			fallthrough
 		case MsgTypeFile:
 			sid, _ := br.ReadByte()
-			data := make([]byte, msgLen-1)
+                        // mp035 removed:
+			//data := make([]byte, msgLen-1)
+                        // mp035 added:
+                        sliceLen := 0
+	                if (msgLen > 0){
+		            sliceLen = msgLen - 1
+	                }
+			data := make([]byte, sliceLen)
+                        // end mp035;
 			br.Read(data)
 			dev.br.devMessage <- &DevMessage{dev.id, sid, data, typ == MsgTypeFile}
 
